@@ -1,10 +1,26 @@
 import styled from 'styled-components';
 import NetflixLogo from '../../assets/images/Netflix_logo.png'
 import { MdSearch } from 'react-icons/md'
+import { useEffect, useState } from 'react';
 
 function Navbar(props){
+    const[scrollY, setScrollY] = useState(0);
+
+    const handleScrollY = () =>{
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      setScrollY(scrollY);
+    }
+
+    useEffect(() =>{
+      handleScrollY();
+      window.addEventListener('scroll', handleScrollY);
+      return () => {
+        window.removeEventListener('scroll', handleScrollY);
+      }
+    },[])
+
     return (
-        <Navigation>
+        <Navigation style={scrollY < 50 ? {backgroundColor: 'transparent'} : {backgroundColor: 'var(--color-background)'}}>
           <div className='nav-container'>
             <div className='logo'>
                 <img src={NetflixLogo} alt="" />
@@ -26,14 +42,15 @@ const Navigation = styled.div`
   position: fixed;
   top: 0;
   transition-timing-function: ease-in;
-  transition: all 1s
+  transition: all 1s;
+  z-index: 10;
 
   @media only screen and (max-witdh: 600px){
     height: 100px;
   }
 
   .nav-container{
-    background-color: #222;
+    background-color: transparent;
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -53,13 +70,13 @@ const Navigation = styled.div`
     }
 
     .nav-search{
-      color: white;
+      color: var(--color-white);
       padding-right: 20px;
       display: flex;
       justify-content: flex-end;
 
       &:hover .icon-search{
-        color: white;
+        color: var(--color-white);
       }
 
       .icon-search{
@@ -79,7 +96,7 @@ const Navigation = styled.div`
         padding: 10px;
         cursor: pointer;
         opacity: 0;
-        background: #222;
+        background: var(--color-background);
         transition: width 0.5s;
 
         &: focus{
