@@ -1,23 +1,10 @@
 import styled from 'styled-components';
 import NetflixLogo from '../../assets/images/Netflix_logo.png'
 import { MdSearch } from 'react-icons/md'
-import { useEffect, useState } from 'react';
+import { useScrollY } from '../hooks';
 
 function Navbar(props){
-    const[scrollY, setScrollY] = useState(0);
-
-    const handleScrollY = () =>{
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      setScrollY(scrollY);
-    }
-
-    useEffect(() =>{
-      handleScrollY();
-      window.addEventListener('scroll', handleScrollY);
-      return () => {
-        window.removeEventListener('scroll', handleScrollY);
-      }
-    },[])
+    const [scrollY] = useScrollY();
 
     return (
         <Navigation style={scrollY < 50 ? {backgroundColor: 'transparent'} : {backgroundColor: 'var(--color-background)'}}>

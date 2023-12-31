@@ -15,12 +15,13 @@ function Intro(props){
             height="100%"
             volume={1}
             muted={ isMuted }
-            url="https://vimeo.com/348614459"
+            url="https://vimeo.com/877812590"
             className="video-intro"
           />
           <div className="info-intro">
-            <h1 className="heading-intro">BOARD SHOP</h1>
-            <p className="overview-intro">Hundreds of Skateboards, Snowboards, and Surfboards are choreographed at 24 boards per second into an ebullient montage of flickering imagery, illustrating the history, artistic beauty, and physical consequences of board culture. Director Patrick Smith created this short film as an homage to his favorite activity and culture. “Board Shop” Juxtaposes hundreds of vintage, classic, and contemporary designs and styles into a trance inducing maelstrom of 24 boards per second imagery. </p>
+            <h1 className="heading-intro">Dying for Beginners</h1>
+            <p className="overview-intro">A short animation, voiced by Dr Kathryn Mannix, which guides you gently on a step by step journey through the process of dying.
+Acclaimed author, speaker and former palliative care physician Dr Kathryn Mannix has spent her medical career working with people who have incurable, advanced illnesses. The author of two Sunday Times Bestsellers – With The End in Mind and Listen, Dr Mannix is on a mission to reclaim the public’s understanding of dying.</p>
           </div>
           {
             isMuted ? (
