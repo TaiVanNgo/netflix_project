@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SmoothHorizontalScrolling } from "../../utils";
 import { VscCommentUnresolved } from "react-icons/vsc";
+
 const movies = [
   "https://www.tallengestore.com/cdn/shop/products/Dora_The_Explorer_And_The_Lost_City_Of_Gold_-_Hollywood_English_Movie_Poster_1_3fd98041-803c-4491-9d4a-a0a1d5533aae.jpg?v=1577693642",
   "https://www.movieposters.com/cdn/shop/products/108b520c55e3c9760f77a06110d6a73b_240x360_crop_center.progressive.jpg?v=1573652543",
@@ -20,26 +21,73 @@ const movies = [
 function Contents(props){
     const sliderRef = useRef();
     const movieRef = useRef();
+    const [dragDown, setDragDown] = useState(0);
+    const [dragMove, setDragMove] = useState(0);
+    const [isDrag, setIsDrag] = useState(false);
 
     const handleScrollRight = () => {
-      console.log(sliderRef.current.scrollWidth);
-      console.log(sliderRef.current.clientWidth);
-
+      const maxScrollLeft = sliderRef.current.scrollWidth - sliderRef.current.clientWidth;
+      if(sliderRef.current.scrollLeft < maxScrollLeft){
+        SmoothHorizontalScrolling(
+          sliderRef.current, 
+          250, 
+          movieRef.current.clientWidth * 2,
+          sliderRef.current.scrollLeft
+        )
+      }
     }
+
+    const handleScrollLeft = () => {
+      if(sliderRef.current.scrollLeft > 0){
+        SmoothHorizontalScrolling(
+          sliderRef.current, 
+          250, 
+          -movieRef.current.clientWidth * 2,
+          sliderRef.current.scrollLeft
+        )
+      }
+    }
+
+    useEffect(() =>{
+      if(isDrag) {
+        if(dragMove < dragDown) handleScrollRight();
+        if(dragMove > dragDown) handleScrollLeft();
+      }
+    }, [dragDown, dragMove, isDrag])
+
+    const onDragStart = (e) => {
+      setIsDrag(true);
+      setDragDown(e.screenX);
+    }
+
+    const onDragEnd = (e) => {
+      setIsDrag(false);
+    }
+
+    const onDragEnter = (e) => {
+      setIsDrag(e.screenX);
+    }
+
     return(
-      <MovieRowContainer>
+      <MovieRowContainer draggable='false'>
         <h1 className="heading">Netflix Originals</h1>
-        <MovieSlider ref={sliderRef}>
+        <MovieSlider 
+          ref={sliderRef} 
+          draggable='true'
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+          onDragEnter={onDragEnter}
+        >
             {
               movies.map((movie, index) => (
-                <div key={index} className="movieItem" ref={movieRef}>
-                  <img src={movie} alt="" />
+                <div key={index} className="movieItem" ref={movieRef} draggable='false'>
+                  <img src={movie} alt="" draggable='false'/>
                   <div className="movieName">Movie Name</div>
                 </div>
               ))
             }
         </MovieSlider>
-        <div className="btnLeft">
+        <div className="btnLeft" onClick={handleScrollLeft}>
             <FiArrowLeft />
         </div>
         <div className="btnRight" onClick={handleScrollRight}>
@@ -125,7 +173,7 @@ const MovieRowContainer = styled.div`
 const MovieSlider = styled.div`
   display: grid;
   gap: 10px;
-  grid-template-columns: repeat(${movies.length}, 300px);
+  grid-template-columns: repeat(${movies.length}, 360px);
   transition: all 0.3s linear;
   user-select: none;
   overflow-y: hidden;
@@ -134,6 +182,18 @@ const MovieSlider = styled.div`
   padding-top: 28px;
   padding-bottom: 28px;
   scroll-behavior: smooth;
+
+  @media screen and (max-width: 1200px){
+    grid-template-columns: repeat(${movies.length}, 300px);
+  }
+
+  @media screen and (max-width: 992px){
+    grid-template-columns: repeat(${movies.length}, 250px);
+  }
+
+  @media screen and (max-width: 768px){
+    grid-template-columns: repeat(${movies.length}, 200px);
+  }
 
   &:hover .movieItem{
     opacity: 0.5;
