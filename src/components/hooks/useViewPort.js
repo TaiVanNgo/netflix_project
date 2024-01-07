@@ -13,5 +13,6 @@ export const useViewPort = () => {
         return () => {
             window.removeEventListener('resize', handleWindowWidth);
         }
-    },[windowWidth])
+    },[])
+    return [windowWidth]
 }

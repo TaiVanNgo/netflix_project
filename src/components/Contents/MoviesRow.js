@@ -5,7 +5,7 @@ import { SmoothHorizontalScrolling } from "../../utils";
 import { useViewPort } from "../hooks";
 
 function MoviesRow(props){
-  const { movies, title } = props;
+    const { movies, title, isNetflix } = props;
     const sliderRef = useRef();
     const movieRef = useRef();
     const [dragDown, setDragDown] = useState(0);
@@ -65,30 +65,30 @@ function MoviesRow(props){
           onDragStart={onDragStart}
           onDragEnd={onDragEnd}
           onDragEnter={onDragEnter}
-          style={
+          style ={
             movies && movies.length > 0
               ? {
-              gridTemplateColumns: `repeat(${movies.length},
-                ${windowWidth > 1200 ? '360px'
-                  : windowWidth > 992 ? '300px'
-                  : windowWidth > 760? '250px' : '200px'
-                })`
-            } : {}
+                gridTemplateColumns: `repeat(${movies.length},
+                  ${windowWidth > 1200 ? '360px' 
+                    : windowWidth > 992? '300px' 
+                    : windowWidth > 768? '250px' : '200px'
+                  })`
+              } : {}
           }
         >
             {
               movies.map((movie, index) => (
-                <div key={index} className="movieItem" ref={movieRef} draggable='false'>
+              <div key={index} className="movieItem" ref={movieRef} draggable='false'>
                   <img src={movie} alt="" draggable='false'/>
                   <div className="movieName">Movie Name</div>
                 </div>
               ))
             }
         </MovieSlider>
-        <div className="btnLeft" onClick={handleScrollLeft}>
+        <div className={`btnLeft ${isNetflix && 'isNetflix'}`} onClick={handleScrollLeft}>
             <FiArrowLeft />
         </div>
-        <div className="btnRight" onClick={handleScrollRight}>
+        <div className={`btnRight ${isNetflix && 'isNetflix'}`} onClick={handleScrollRight}>
             <FiArrowRight />
         </div>
       </MovieRowContainer>
@@ -118,8 +118,8 @@ const MovieRowContainer = styled.div`
     transform-origin: center;
     cursor: pointer;
     background-color: rgba(0, 0, 0, 0.5);
-    height: 100px;
-    width: 50px;
+    height: 50px;
+    width: 40px;
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -136,6 +136,11 @@ const MovieRowContainer = styled.div`
         opacity: 0.7;
         font-size: 50px;
         transition: all 0.3s linear;
+    }
+
+    &.isNetflix{
+      height: 100px;
+      width: max-content;
     }
   }
   .btnRight{
@@ -146,8 +151,8 @@ const MovieRowContainer = styled.div`
     transform-origin: center;
     cursor: pointer;
     background-color: rgba(0, 0, 0, 0.5);
-    height: 100px;
-    width: 50px;
+    height: 50px;
+    width: 40px;
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -164,6 +169,11 @@ const MovieRowContainer = styled.div`
         opacity: 0.7;
         font-size: 50px;
         transition: all 0.3s linear;
+    }
+
+    &.isNetflix{
+      height: 100px;
+      width: max-content;
     }
   }
 `;
